@@ -14,11 +14,12 @@ export const register = ({ dispatch }, { payload, context }) => {
 
 export const login = ({ dispatch }, { payload, context }) => {
     return axios.post('/login', payload).then((response) => {
-        dispatch('setToken', response.data.meta.token).then(() => {
+       dispatch('setToken', response.data.meta.token).then(() => {
             dispatch('fetchUser')
         })
+       return Promise.resolve(response.data.user.name)
     }).catch((error) => {
-        context.errors = error.response.data.errors
+        return Promise.reject(error.response.data.errors)
     })
 }
 
@@ -34,7 +35,7 @@ export const reset = ({ dispatch }, { payload, context }) => {
 export const fetchUser = ({ commit }) => {
     return axios.get('/user').then((response) => {
         commit('setAuthenticated', true)
-        commit('setUserData', response.data.data)
+        commit('setUserData', response.data.user)
     })
 }
 
@@ -50,17 +51,15 @@ export const setToken = ({ commit, dispatch }, token) => {
             setHttpToken(token)
         })
     }
-
     commit('setToken', token)
     setHttpToken(token)
 }
 
 export const checkTokenExists = ({ commit, dispatch }, token) => {
-    return localforage.getItem('authtoken').then((token) => {
+    return localforage.getItem('authtoken').then( token => {
         if (isEmpty(token)) {
             return Promise.reject('NO_STORAGE_TOKEN');
         }
-
         return Promise.resolve(token)
     })
 }

@@ -31,7 +31,13 @@
 					
 					<div class="form-group">
 						<router-link :to="{ name: 'requestPassword' }">Forgot Password?</router-link>
-						<button type="button" @click="submit" class="btn btn-primary pull-right">Login</button>
+						<button type="button" @click="submit" class="btn btn-primary pull-right" :disabled="loading">
+                            <span v-if="!loading">Login</span>
+                            <span v-else>
+                                <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                                Checking...
+                            </span>
+                        </button>
 					</div>
 
 				</form>	
@@ -51,6 +57,7 @@
             return {
                 email: null,
                 password: null,
+                loading: false,
                 errors: []
             }
         },
@@ -59,6 +66,7 @@
                 login: 'auth/login'
             }),
             submit () {
+                this.loading = true;
                 this.login({
                     payload: {
                         email: this.email,
@@ -68,13 +76,15 @@
                 }).then(() => {
                     localforage.getItem('intended').then((name) => {
                         if (isEmpty(name)) {
-                            this.$router.replace({ name: 'home' })
-                            return
+                            return this.$router.replace({ name: 'home' })
                         }
 
-                        this.$router.replace({ name: name })
+                        return this.$router.replace({ name: name })
                     })
+                }).catch( errors => {
+                    this.errors = errors
                 })
+                return this.loading = false
             }
         }
     }

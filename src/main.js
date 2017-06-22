@@ -11,7 +11,7 @@ require('bootstrap-sass');
 
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.baseURL = 'http://vue-basic.dev/api'
+window.axios.defaults.baseURL = 'http://lms.app/api'
 
 localforage.config({
     driver: localforage.LOCALSTORAGE,
@@ -35,5 +35,5 @@ new Vue({
   	store,
   	router,
   	template: '<App/>',
-  	components: { App }
+  	components: { App },
 })

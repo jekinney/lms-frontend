@@ -7,12 +7,18 @@
 
 <script>
     import Navigation from '@/components/Navigation'
+    import SideNav from '@/components/SideNav'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'app',
         components: {
-            Navigation
-        }
+            Navigation,
+            SideNav
+        },
+        computed: mapGetters({
+            user: 'auth/user'
+        })
     }
 </script>
 

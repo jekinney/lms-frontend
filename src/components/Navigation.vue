@@ -12,7 +12,7 @@
                 </button>
 
                 <!-- Branding Image -->
-                <router-link :to="{ name: 'home' }" class="navbar-brand">Vue Basic</router-link>
+                <router-link :to="{ name: 'home' }" class="navbar-brand">LMS Frontend</router-link>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -35,7 +35,7 @@
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="">Logout</a></li>
+                            <li><a role="button" @click="signout">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -45,11 +45,21 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
 
     export default {
         computed: mapGetters({
             user: 'auth/user'
-        })
+        }),
+        methods: {
+            ...mapActions({
+                logout: 'auth/logout'
+            }),
+            signout () {
+                this.logout().then(() => {
+                    this.$router.replace({ name: 'home' })
+                })
+            }
+        }
     }
 </script>

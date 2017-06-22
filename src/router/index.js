@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { routes as routes } from '../app/index'
+import before from './before'
+import routes from './routes'
 
 Vue.use(Router)
 
 const router = new Router({
-	routes: routes
+	linkActiveClass: 'active',
+	routes
 })
 
-// regiser before each hook 
+router.beforeEach(before)
 
 export default router
